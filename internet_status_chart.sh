@@ -41,16 +41,17 @@ plus)
 esac
 
 # Process link down per day
-declare -A commits_per_day
-commits_max=0
+declare -A failures_per_day
+failures_max=0
 
 year=`date +"%Y"`
 since=$(date -d "$(date -d '1 year ago + 1 day' +"%F -%u day")" +"%s")
 
-while read -r commits_n commits_date; do
-  (( commits_n > commits_max )) && commits_max=$commits_n
-  date_diff=$(( ($(date --date="${commits_date} 13:00 UTC" "+%s") - since) / (60*60*24) ))
-  commits_per_day["${date_diff}"]=$commits_n
+while read -r failures_n failures_date
+do
+  (( failures_n > failures_max )) && failures_max=$failures_n
+  date_diff=$(( ($(date --date="${failures_date} 13:00 UTC" "+%s") - since) / (60*60*24) ))
+  failures_per_day["${date_diff}"]=$failures_n
 done <<< $(IFS=$'\n' ; for d in `grep "LINK DOWN" $log | sed 's/LINK DOWN://' | sed 's/^[ \t]*//'` ; do date -d $d +"%Y-%m-%d" ; done | uniq -c)
 
 # Print name of months
@@ -78,8 +79,8 @@ for day_n in $(seq 0 6); do
   printf '\e[m%-4s' "${name_of_days[day_n]}"
   for week_n in $(seq 0 52); do
     key=$(( week_n * 7 + day_n ))
-    if [[ -v commits_per_day["${key}"] ]]; then
-      value=$(( ${commits_per_day["${key}"]}00 / commits_max))
+    if [[ -v failures_per_day["${key}"] ]]; then
+      value=$(( ${failures_per_day["${key}"]}00 / failures_max))
       if (( value <= 25 )); then
         # Low activity
         printf "\x1b[38;5;22m%s%s" "$char_full" "$space"
