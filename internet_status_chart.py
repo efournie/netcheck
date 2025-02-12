@@ -104,4 +104,7 @@ print()
 print(' 0 ', end='')
 for color in colors:
     print(f'{color}{square}{color_off}', end=' ')
-print(f'{thresholds[-1] // 3600} hours')
+if threshold[-1] < 3600 * 2:
+    print(f'{thresholds[-1] // 60} minutes')
+else:
+    print(f'{thresholds[-1] // 3600} hours')
