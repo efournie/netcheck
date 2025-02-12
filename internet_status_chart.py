@@ -53,10 +53,14 @@ for x in daily_downtime:
 
 downtimes_sec.sort()
 n_thresholds = 4
-thresholds = [0]
-for i in range(n_thresholds-1):
-    thresholds.append(downtimes_sec[i * len(downtimes_sec) // (n_thresholds - 1)])
-thresholds.append(downtimes_sec[-1])
+
+thresholds = []
+for _ in range(n_thresholds):
+    thresholds.insert(0, downtimes_sec[-1])
+    t = downtimes_sec[-1] // 2
+    downtimes_sec = [x for x in downtimes_sec if x < t]
+thresholds.insert(0,0)
+
 # generate heat graph w/ colors etc.
 square = '■'
 
@@ -76,7 +80,7 @@ def value(downtime):
         if downtime <= t: return i
         i += 1
 
-colors = [ '\033[38;5;244m', '\033[38;5;118m', '\033[38;5;112m', '\033[38;5;76m', '\033[38;5;28m']
+colors = [ '\033[38;5;244m', '\033[38;5;22m', '\033[38;5;34m', '\033[38;5;40m', '\033[38;5;118m']
 color_off = '\033[0m'
 for dow in range(7):
     i = dow
@@ -94,3 +98,11 @@ for dow in range(7):
         print(f'{colors[value(events[i])]}{square}{color_off}', end=' ')
         i += 7
     print()
+
+# Legend
+# TODO: values in minutes instead of less/more
+print()
+print(' 0 ', end='')
+for color in colors:
+    print(f'{color}{square}{color_off}', end=' ')
+print(f'{thresholds[-1] // 60} min')
