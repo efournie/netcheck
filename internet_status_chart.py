@@ -61,9 +61,7 @@ for _ in range(n_thresholds):
     downtimes_sec = [x for x in downtimes_sec if x < t]
 thresholds.insert(0,0)
 
-# generate heat graph w/ colors etc.
-square = '■'
-
+# Generate list containing downtime in seconds for each day, including days without downtime
 date = start_date
 events = []
 while date < now:
@@ -74,14 +72,31 @@ while date < now:
         events.append(0)
     date = date + timedelta(days=1)
 
+# Function returning the value corresponding to a daily downtime
 def value(downtime):
     i = 0
     for t in thresholds:
         if downtime <= t: return i
         i += 1
 
+# Print month names on the first line
+prev_month = start_date.month
+date = start_date
+print('    ', end='')
+while date < now:
+    if date.month != prev_month:
+        prev_month = date.month
+        print(date.strftime("%b"), end=' ')
+        date = date + timedelta(days=14)
+    else:
+        date = date + timedelta(days=7)
+        print('  ', end='')
+print()
+
+# generate heat graph with colors
 colors = [ '\033[38;5;244m', '\033[38;5;22m', '\033[38;5;34m', '\033[38;5;40m', '\033[38;5;118m']
 color_off = '\033[0m'
+square = '■'
 for dow in range(7):
     i = dow
     if dow == 0:
