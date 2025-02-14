@@ -124,5 +124,5 @@ def approx_time(x):
         return f'{x // 3600} h'
 
 for i in range(len(thresholds)):
-    print(f'{colors[i]}{square}{color_off} {approx_time(thresholds[i])}', end=' ')
+    print(f'{colors[i]}{square}{color_off} {"" if thresholds[i]==0 else "<="}{approx_time(thresholds[i])}', end=' ')
 print()
