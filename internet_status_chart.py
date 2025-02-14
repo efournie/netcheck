@@ -57,7 +57,7 @@ n_thresholds = 4
 thresholds = []
 for _ in range(n_thresholds):
     thresholds.insert(0, downtimes_sec[-1])
-    t = downtimes_sec[-1] // 2
+    t = downtimes_sec[-1] // 8
     downtimes_sec = [x for x in downtimes_sec if x < t]
 thresholds.insert(0,0)
 
@@ -94,7 +94,7 @@ while date < now:
 print()
 
 # generate heat graph with colors
-colors = [ '\033[38;5;244m', '\033[38;5;22m', '\033[38;5;34m', '\033[38;5;40m', '\033[38;5;118m']
+colors = [ '\033[38;5;244m', '\033[38;5;20m', '\033[38;5;34m', '\033[38;5;178m', '\033[38;5;196m']
 color_off = '\033[0m'
 square = '■'
 for dow in range(7):
@@ -116,10 +116,13 @@ for dow in range(7):
 
 # Legend
 print()
-print(' 0 ', end='')
-for color in colors:
-    print(f'{color}{square}{color_off}', end=' ')
-if thresholds[-1] < 3600 * 2:
-    print(f'{thresholds[-1] // 60} minutes')
-else:
-    print(f'{thresholds[-1] // 3600} hours')
+
+def approx_time(x):
+    if x < 3600:
+        return f'{x // 60} min'
+    else:
+        return f'{x // 3600} h'
+
+for i in range(len(thresholds)):
+    print(f'{colors[i]}{square}{color_off} {approx_time(thresholds[i])}', end=' ')
+print()
