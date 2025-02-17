@@ -44,6 +44,8 @@ daily_downtime = [x for x in daily_downtime if (now-x[0]) < timedelta(days=365)]
 dow_1st_entry = daily_downtime[0][0].weekday()
 if dow_1st_entry != 0:
     start_date = daily_downtime[0][0] + timedelta(days=7 - dow_1st_entry)
+else:
+    start_date = daily_downtime[0][0]
 daily_downtime = [x for x in daily_downtime if x[0] >= start_date]
 
 # Define the thresholds
