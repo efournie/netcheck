@@ -35,10 +35,11 @@ for i in range(len(lines)):
             duration_str = downtime_line[49:-1].replace(' seconds.', '')
             duration = int(duration_str.split(' minutes and ')[0]) * 60 + int(duration_str.split(' minutes and ')[1])
             cur_duration += duration
+daily_downtime.append([cur_date, cur_duration])
 
 # Truncate list to last 365 days
 now = datetime.now()
-daily_downtime = [x for x in daily_downtime if (now-x[0]) < timedelta(days=365)]
+daily_downtime = [x for x in daily_downtime if (now-x[0]) <= timedelta(days=365)]
 
 # Remove first entries if needed in order to start on a Monday
 dow_1st_entry = daily_downtime[0][0].weekday()
@@ -66,8 +67,8 @@ thresholds.insert(0,0)
 # Generate list containing downtime in seconds for each day, including days without downtime
 date = start_date
 events = []
-while date < now:
-    if daily_downtime and daily_downtime[0][0] == date:
+while date.date() <= now.date():
+    if daily_downtime and daily_downtime[0][0].date() == date.date():
         events.append(daily_downtime[0][1])
         daily_downtime.pop(0)
     else:
