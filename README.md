@@ -52,7 +52,7 @@ under the `sample-scripts` to showcase how these options can be used:
 ## Script to display link down events
 A github-like activity chart displaying link down events can be displayed with:
 
-    ./internet_status_chart.sh
+    python /usr/local/src/netcheck/internet_status_chart.py -i /var/log/connection.log
 
 ![Link down events graph](linkdown_graph.png)
 
