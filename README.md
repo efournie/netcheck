@@ -56,4 +56,4 @@ A github-like activity chart displaying link down events can be displayed with:
 
 ![Link down events graph](linkdown_graph.png)
 
-(The script is adapted from [https://github.com/aaossa/git-activity])
+(The python script is partly inspired by [https://github.com/aaossa/git-activity])

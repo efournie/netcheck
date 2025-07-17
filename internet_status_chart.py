@@ -2,12 +2,17 @@ import argparse
 from datetime import datetime, timedelta
 
 parser = argparse.ArgumentParser(description='Generate a github-like activity chart displaying link down events.')
-parser.add_argument('-i', '--input', type=str, default='', help='Input file, i.e. netcheck ')
+parser.add_argument('-i', '--input', type=str, default='', help='Input file, i.e. netcheck log file')
 args = parser.parse_args()
 
 if args.input == '':
     print('Error: input file required')
     exit()
+
+# Display parameters
+colors = [ '\033[38;5;244m', '\033[38;5;67m', '\033[38;5;20m', '\033[38;5;34m', '\033[38;5;178m', '\033[38;5;196m']
+color_off = '\033[0m'
+square = '■'
 
 # Load input file
 lines = []
@@ -55,7 +60,7 @@ for x in daily_downtime:
     downtimes_sec.append(x[1])
 
 downtimes_sec.sort()
-n_thresholds = 4
+n_thresholds = len(colors) - 1
 
 thresholds = []
 for _ in range(n_thresholds):
@@ -97,9 +102,6 @@ while date < now:
 print()
 
 # generate heat graph with colors
-colors = [ '\033[38;5;244m', '\033[38;5;20m', '\033[38;5;34m', '\033[38;5;178m', '\033[38;5;196m']
-color_off = '\033[0m'
-square = '■'
 for dow in range(7):
     i = dow
     if dow == 0:
@@ -121,10 +123,12 @@ for dow in range(7):
 print()
 
 def approx_time(x):
-    if x < 3600:
-        return f'{x // 60} min'
+    if x < 60:
+        return f'{x} sec'
+    elif x < 3600:
+        return f'{round(x / 60)} min'
     else:
-        return f'{x // 3600} h'
+        return f'{round(x / 3600)} h'
 
 for i in range(len(thresholds)):
     print(f'{colors[i]}{square}{color_off} {"" if thresholds[i]==0 else "<="}{approx_time(thresholds[i])}', end=' ')
