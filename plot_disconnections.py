@@ -6,6 +6,8 @@ parser = argparse.ArgumentParser(description='Generate a plot showing the number
 parser.add_argument('-i', '--input', type=str, default='/var/log/connection.log', help='Input file, i.e. netcheck log file')
 parser.add_argument('-o', '--output', type=str, default='', help='Output image file')
 parser.add_argument('-f', '--filter', type=str, default='', help='String used to filter the log file, can for example be the year')
+parser.add_argument('--width', type=int, default=16, help='Graph width')
+parser.add_argument('--height', type=int, default=2, help='Graph height')
 args = parser.parse_args()
 
 if args.input == '':
@@ -31,6 +33,6 @@ for d in list(down_evts_dict.keys()):
     down_evts_dates.append(datetime.fromisoformat(d))
     down_evts_numbers.append(n)
 
-plt.figure(figsize=(14, 4))
+plt.figure(figsize=(args.width, args.height))
 plt.bar(down_evts_dates, down_evts_numbers)
 plt.savefig(args.output)
