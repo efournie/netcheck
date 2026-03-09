@@ -15,7 +15,11 @@ if args.input == '':
     exit()
 
 months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-down_evts_dict = {}
+today_str = f'{datetime.now().year}-{datetime.now().month:02d}-{datetime.now().day:02d}'
+if args.filter in today_str:
+    down_evts_dict = {today_str: 0}
+else:
+    down_evts_dict = {}
 with open(args.input) as file:
     for line in file:
         if 'LINK DOWN' in line and args.filter in line:
