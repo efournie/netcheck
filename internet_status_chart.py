@@ -65,8 +65,9 @@ n_thresholds = len(colors) - 1
 thresholds = []
 for _ in range(n_thresholds):
     thresholds.insert(0, downtimes_sec[-1])
-    t = downtimes_sec[-1] // 8
-    downtimes_sec = [x for x in downtimes_sec if x < t]
+    t = downtimes_sec[-1] / 8
+    downtimes_sec = [x for x in downtimes_sec if x <= t]
+
 thresholds.insert(0,0)
 
 # Generate list containing downtime in seconds for each day, including days without downtime
