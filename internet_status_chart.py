@@ -1,5 +1,6 @@
 import argparse
 from datetime import datetime, timedelta
+import math
 
 parser = argparse.ArgumentParser(description='Generate a github-like activity chart displaying link down events.')
 parser.add_argument('-i', '--input', type=str, default='', help='Input file, i.e. netcheck log file')
@@ -63,9 +64,10 @@ downtimes_sec.sort()
 n_thresholds = len(colors) - 1
 
 thresholds = []
+logbase = math.floor(math.pow(downtimes_sec[-1], 1/n_thresholds))
 for _ in range(n_thresholds):
     thresholds.insert(0, downtimes_sec[-1])
-    t = downtimes_sec[-1] / 8
+    t = downtimes_sec[-1] / logbase
     downtimes_sec = [x for x in downtimes_sec if x <= t]
 
 thresholds.insert(0,0)
